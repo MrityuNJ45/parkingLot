@@ -27,16 +27,6 @@ public class SlotTest {
 
     }
 
-    @Test
-    public void expectsFalseWhenCarIsPresentInSlot(){
-
-        Slot slot = new Slot(1);
-        Car car = new Car("789456", Color.Black);
-        //slot.parkCarInSlot(car);
-//        assertEquals();
-        System.out.println(slot.isEmpty());
-
-    }
 
 
     @Test

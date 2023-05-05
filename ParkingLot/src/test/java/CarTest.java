@@ -8,24 +8,18 @@ public class CarTest {
 
     @Test
     public void expectsCarIsCreatedOrNot(){
-
         Car aCar = new Car("123456", Color.Black);
         assertEquals(true, aCar instanceof Car);
-
     }
 
 
     @Test
     public void expectsTrueIfCorrectColoredIsChecked(){
-
         Car aCar = new Car("123456", Color.Black);
         assertEquals(true,aCar.isOfColor(Color.Black));
-
-
-
     }
 
-   
+
 
 
 }

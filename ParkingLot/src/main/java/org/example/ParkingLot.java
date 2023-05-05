@@ -1,110 +1,96 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ParkingLot {
 
-    private List<Floor> floors = new ArrayList<>();
+    // JobOfClass :
+
+    private List<Slot> slots = new ArrayList<>();
+    private HashMap<Token, Car> tokenCarMap = new HashMap<>();
 
 
-    public ParkingLot(Integer noOfFloors, Integer noOfSlotsPerEachFloors){
-
-        for(int i=0; i< noOfFloors; i++){
-
-            floors.add(new Floor(i, noOfSlotsPerEachFloors));
-
+    public ParkingLot(int noOfSlots){
+        for(int i=0; i<noOfSlots; i++){
+            slots.add(new Slot(i+1));
         }
-
     }
 
     public Integer numberOfCarsOfColor(Color desiredColor){
-
         Integer noOfCars = 0;
-
-        for(Floor floor : floors){
-            noOfCars += floor.noOfCarsOfParticularColor(desiredColor);
+        for(Slot slot : this.slots){
+            if(slot.isColorOfCarPresent(desiredColor)) {
+                noOfCars += 1;
+            }
         }
-
         return noOfCars;
-
     }
 
-    public void addFloor(Floor floor){
-
-        this.floors.add(floor);
 
 
-    }
 
-    public Integer getNoOfFloors(){
 
-        return this.floors.size();
-
-    }
-
-    public void addCarToEmptySlot(Car car) throws IllegalStateException{
-
+    public Token addCarToEmptySlot(Car car) throws IllegalStateException{
         if(isFull()){
             throw new IllegalStateException("Sorry, can't park parking lot is full.");
         }
-
-        for(Floor floor : floors){
-
-            if(!floor.ifFloorIsFull()){
-                floor.addCarToEmptySlot(car);
-                return;
+        Token token = null;
+        for(Slot slot : this.slots){
+            if(slot.isEmpty()){
+                slot.park(car);
+                 token = new Token();
+                 this.tokenCarMap.put(token,car);
+                break;
             }
-
         }
-
+        return token;
     }
 
-    public Integer getNumberOfEmptySlots(){
 
-        Integer numOfEmptySlots = 0;
-        for(Floor floor : this.floors){
-
-            if(!floor.ifFloorIsFull()){
-                numOfEmptySlots += floor.getNoOfEmptySlots();
-            }
-
-        }
-
-        return numOfEmptySlots;
-    }
 
 
     public Boolean isFull(){
-
-        for(Floor floor : this.floors){
-
-            if(!floor.ifFloorIsFull()){
+        for(Slot slot : this.slots){
+            if(slot.isEmpty()){
                 return false;
             }
-
         }
-
         return true;
-
     }
 
-    public void unparkFromParkingLot(Car car) throws IllegalStateException{
+    public Car unparkFromParkingLot(Token token) throws IllegalStateException{
 
-        for(Floor floor : this.floors){
-
-            if(floor.checkParticularCarPresentOrNot(car)){
-                floor.unparkFromFloor(car);
-                return;
-            }
-
+        Car car = this.tokenCarMap.get(token);
+        if(car == null){
+            throw new IllegalStateException("Car not found");
         }
 
-        throw new IllegalStateException("Car not found");
+       for(Slot slot : this.slots){
+           if(slot.particularCarPresentOrNot(car)){
+               slot.unpark(car);
+               return car;
+           }
+       }
 
+       throw new IllegalStateException("Car not found");
+
+    }
+
+    public Boolean ifTokenIsPresentInTheMap(Token token){
+
+        Set<Token> tokens =  this.tokenCarMap.keySet();
+        return tokens.contains(token);
 
     }
 
 
-
+    public Integer getNumberOfEmptySlots() {
+        Integer numOfEmptySlot = 0;
+        for(Slot slot : this.slots){
+            if(slot.isEmpty()){
+                numOfEmptySlot++;
+            }
+        }
+        return numOfEmptySlot;
+    }
 }

@@ -28,6 +28,8 @@ public class Slot {
 
     }
 
+
+
     public Boolean isEmpty(){
 
         return this.car.isEmpty();
@@ -35,28 +37,20 @@ public class Slot {
     }
 
     public Boolean isColorOfCarPresent(Color desiredColor){
-
         if(this.car.isPresent()) return this.car.get().isOfColor(desiredColor);
-
         return false;
-
     }
 
     public Slot giveEmptySlot(){
-
-         return this;
-
+        return this;
     }
 
     public void unpark(Car car) throws IllegalStateException{
-
         if(car.equals(this.car.get())){
             this.car = Optional.empty();
             return;
         }
-
         throw new IllegalStateException("Invalid Car details...");
-
     }
 
 

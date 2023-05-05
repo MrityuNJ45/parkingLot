@@ -19,6 +19,10 @@ public class Car {
 
     }
 
+    public Boolean isNumber(String number){
+        return this.carNo.equals(number);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
